@@ -1,0 +1,38 @@
+{
+  "name": "lol-helper",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "@tauri-apps/api": "^1",
+    "nanoid": "^5.0.7",
+    "pinia": "^2.2.2",
+    "pinia-plugin-persistedstate": "^4.0.2",
+    "vue": "^3.5.8",
+    "vue-router": "^4.4.3"
+  },
+  "devDependencies": {
+    "@iconify-json/ant-design": "^1.2.1",
+    "@iconify-json/ep": "^1.2.0",
+    "@tauri-apps/cli": "^1",
+    "@unocss/preset-icons": "^0.62.4",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.77.8",
+    "sass-loader": "^16.0.0",
+    "typescript": "^5.2.2",
+    "unocss": "^0.62.1",
+    "unplugin-auto-import": "^0.18.2",
+    "vite": "^5.3.1",
+    "vue-tsc": "^2.0.22"
+  }
+}

@@ -1,0 +1,66 @@
+{
+    "root": {
+        "data": {
+            "id": "d442reawhlk0",
+            "created": 1726120812722,
+            "text": "房间功能"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "d442s5tb7aw0",
+                    "created": 1726120872609,
+                    "text": "英雄随机功能"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "d442szihhcw0",
+                            "created": 1726120937257,
+                            "text": "英雄列表获取"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "d442tjywvao0",
+                            "created": 1726120981786,
+                            "text": "英雄随机算法"
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "d442t2951zk0",
+                    "created": 1726120943223,
+                    "text": "结果同步功能"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "d442tapcjpk0",
+                            "created": 1726120961617,
+                            "text": "websocket"
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "d442tew9cyw0",
+                    "created": 1726120970742,
+                    "text": "语音功能",
+                    "background": "#d9d9d9",
+                    "color": "#ff0000"
+                },
+                "children": []
+            }
+        ]
+    },
+    "template": "right",
+    "theme": "fresh-blue",
+    "version": "1.4.43"
+}
