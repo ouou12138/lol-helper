@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import StatusBar from "@/components/StatusBar.vue"
+import Background from "@/components/Background.vue"
 import { appWindow } from "@tauri-apps/api/window";
 import useRoomStore from "./store/useRoomStore";
 import { clipboard, dialog } from "@tauri-apps/api"
@@ -41,7 +42,8 @@ provide("window_focus", focus)
 <template>
   <div class="w-100vw h-100vh dark:bg-darkTertiary bg-#fff transition-background-color duration-800 rounded-10px overflow-hidden backdrop-blur-18px border border-#999/30
     select-none flex flex-col">
-    <StatusBar>
+    <Background class="absolute z--1 top-0 w-100vw h-100vh"></Background>
+    <StatusBar class="z-99" fixed placeholder>
       <template #title v-if="roomInfo.id">
         <div class="text-#666 dark:text-#ddd text-3.5 flex gap-2 items-center">
           <span>{{ roomInfo.name }} - {{ roomInfo.id }}:{{ roomInfo.password }}</span>
@@ -52,7 +54,7 @@ provide("window_focus", focus)
         </div>
       </template>
     </StatusBar>
-    <div class="flex-1">
+    <div class="flex-1 z-2">
       <RouterView> </RouterView>
     </div>
   </div>

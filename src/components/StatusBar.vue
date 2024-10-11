@@ -1,32 +1,43 @@
 <template>
-  <div class="w-full h-30px" @mousedown="startMove">
-    <div class="flex h-inherit items-center justify-between px-10px">
-      <div class="flex items-center">
-        <slot name="title"></slot>
-      </div>
-      <div class="tool flex flex-row-reverse items-center text-white text-12px gap-2" :class="{ active: focus }">
-        <div class="radius-bt p-2px bg-red rounded-100 shadow shadow-gray-600" @mousedown.stop @click.stop="close">
-          <div class="i-ep-close close"></div>
+  <div class="w-full h-30px top-0">
+    <div class="content w-inherit h-inherit" :class="{ 'absolute': fixed }" @mousedown="startMove">
+      <div class="flex h-inherit items-center justify-between px-10px">
+        <div class="flex items-center">
+          <slot name="title"></slot>
         </div>
-        <div class="radius-bt p-2px bg-#2ecc71 rounded-100 shadow shadow-gray-600" @mousedown.stop
-          @click.stop="minimize">
-          <div class="i-ep-minus minimize"> </div>
-        </div>
-        <div class="text-18px" @mousedown.stop @click.stop="switchTheme">
-          <div
-            class="i-ant-design:sun-filled dark:i-ant-design:moon-filled dark:text-#ccc text-#999  transition-all-800">
+        <div class="tool flex flex-row-reverse items-center text-white text-12px gap-2" :class="{ active: focus }">
+          <div class="radius-bt p-2px bg-red rounded-100 shadow shadow-gray-600" @mousedown.stop @click.stop="close">
+            <div class="i-ep-close close"></div>
+          </div>
+          <div class="radius-bt p-2px bg-#2ecc71 rounded-100 shadow shadow-gray-600" @mousedown.stop
+            @click.stop="minimize">
+            <div class="i-ep-minus minimize"> </div>
+          </div>
+          <div class="text-18px" @mousedown.stop @click.stop="switchTheme">
+            <div
+              class="i-ant-design:sun-filled dark:i-ant-design:moon-filled dark:text-#ccc text-#999  transition-all-800">
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="divider h-inherit" v-if="placeholder"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window';
+const props = withDefaults(defineProps<{
+  fixed?: boolean
+  placeholder?: boolean
+}>(), {
+  fixed: false,
+  placeholder: false
+})
+
+const { placeholder, fixed } = toRefs(props)
 
 const focus = inject<Ref<boolean>>("window_focus")
-console.log(focus);
 
 type ThemeType = "light" | "dark"
 
@@ -39,6 +50,7 @@ const startMove = () => {
 const minimize = () => {
   appWindow.minimize()
 }
+
 const close = () => {
   appWindow.close()
 }

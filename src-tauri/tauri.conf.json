@@ -76,8 +76,8 @@
     "windows": [
       {
         "title": "lol-helper",
-        "width": 960,
-        "height": 540,
+        "width": 1200,
+        "height": 675,
         "titleBarStyle": "Transparent",
         "resizable": false,
         "decorations": false,

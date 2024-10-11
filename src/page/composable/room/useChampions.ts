@@ -12,6 +12,7 @@ const useChampions = () => {
       minimalChampions.value = res;
       return res;
     } catch (error: any) {
+      console.error(error);
       throw new Error(error.message || "未知错误");
     }
   };

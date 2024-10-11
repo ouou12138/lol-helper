@@ -68,15 +68,6 @@ pub async fn http_post(
     }
 }
 
-// impl serde::Serialize for reqwest::Response {
-//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-//     where
-//         S: serde::Serializer,
-//     {
-//         serializer.serialize_str(&);
-//     }
-// }
-
 #[tauri::command]
 pub async fn http_assets(url: String, auth: String, timeout: f32) -> Result<Vec<u32>, String> {
     let client = reqwest::Client::builder()

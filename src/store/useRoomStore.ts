@@ -18,8 +18,6 @@ const useRoomStore = defineStore(
     const roomInfo = ref<RoomInfo>(createRoomInfo());
 
     const updateRoomInfo = (info: Partial<RoomInfo>) => {
-      console.log("23333333333", info);
-
       roomInfo.value = {
         ...roomInfo.value,
         ...info,

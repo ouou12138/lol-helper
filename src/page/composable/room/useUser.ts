@@ -11,6 +11,7 @@ const useUserInfo = () => {
       expPercent.value = ((user.xpSinceLastLevel / user.xpUntilNextLevel) * 100 * 0.81).toFixed(0) + "%";
       return user;
     } catch (error: any) {
+      console.error(error.message);
       throw new Error(error.message || "未知错误");
     }
   };
