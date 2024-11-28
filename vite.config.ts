@@ -2,11 +2,13 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import UnoCss from "unocss/vite";
 import AutoImport from "unplugin-auto-import/vite";
+import Jsx from "@vitejs/plugin-vue-jsx";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [
     vue(),
+    Jsx(),
     UnoCss(),
     AutoImport({
       imports: ["vue", "vue-router", "pinia"],
