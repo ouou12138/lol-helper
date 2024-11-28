@@ -1,7 +1,22 @@
 import { invoke } from "@tauri-apps/api";
+import Config from "@/data/config";
+import AssetsCacheManager from "./cache";
+
+enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+}
+
+type AssetsResponse = {
+  data: number[];
+  file_type: string;
+};
 
 class LolClient {
-  host = "https://127.0.0.1";
+  host = Config.lol_client_base;
 
   port = 0;
   private token = "";
@@ -19,54 +34,78 @@ class LolClient {
     this.authorization = `Basic ${btoa(`riot:${this.token}`)}`;
   }
 
-  getLcuInfo() {
+  getLcuInfo(): LcuInfo {
     return {
       port: this.port,
       token: this.token,
     };
   }
 
+  private processUrl(url: string) {
+    const { host } = this;
+    let _url = url.startsWith("/") ? url : `/${url}`;
+    return _url.startsWith("http://") || _url.startsWith("https://") ? _url : `${host}${_url}`;
+  }
+
+  async request<R = any>(method: HttpMethod, url: string, data?: Record<string, any>): Promise<R> {
+    const { authorization } = this;
+    const _url = this.processUrl(url);
+    const response = await invoke<R>("http_request", {
+      method: method,
+      url: _url,
+      data: data,
+      auth: authorization,
+      timeout: this.timeout,
+    });
+    return response;
+  }
+
   async get<T = Record<string, string>, D = any>(url: string, params?: T): Promise<D> {
     try {
-      const { host, authorization } = this;
-      const _url = url.startsWith("/") ? url : `/${url}`;
-      const data = await invoke<D>("http_get", {
-        url: `${host}${_url}${new URLSearchParams(params as Record<string, string>)}`,
-        auth: authorization,
-        timeout: this.timeout,
-      });
-      return data;
+      let _url = `${url}${new URLSearchParams(params as Record<string, string>)}`;
+      return this.request<D>(HttpMethod.GET, _url);
     } catch (error) {
+      console.error(error);
+
       throw error;
     }
   }
 
   async post<T = Record<string, any>, D = any>(url: string, data?: T): Promise<D> {
     try {
-      const { host, authorization } = this;
-      const _url = url.startsWith("/") ? url : `/${url}`;
-      return await invoke<D>("http_post", {
-        url: `${host}${_url}`,
-        data,
-        auth: authorization,
-        timeout: this.timeout,
-      });
+      return this.request<D>(HttpMethod.POST, url, data);
     } catch (error) {
       throw error;
     }
   }
 
-  async loadAssets<D = any>(url: string): Promise<D> {
+  async patch<T = Record<string, any>, D = any>(url: string, data?: T): Promise<D> {
     try {
-      const { host, authorization } = this;
-      let _url = url.startsWith("/") ? url : `/${url}`;
-      _url = url.startsWith("http://") || host.startsWith("https://") ? url : `${host}/${url}`;
+      return this.request<D>(HttpMethod.PATCH, url, data);
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      return await invoke<D>("http_assets", {
-        url: `${host}${_url}`,
-        auth: authorization,
-        timeout: this.timeout,
-      });
+  async loadAssets(url: string): Promise<Blob> {
+    try {
+      const { authorization } = this;
+      const _url = this.processUrl(url);
+      let resp = await AssetsCacheManager.get(url);
+      let blob: Blob = null;
+      if (resp) {
+        blob = await resp.blob();
+      } else {
+        const response = await invoke<AssetsResponse>("http_assets", {
+          url: _url,
+          auth: authorization,
+          timeout: this.timeout,
+        });
+        const u8arr = new Uint8Array(response.data);
+        blob = new Blob([u8arr], { type: response.file_type });
+        AssetsCacheManager.set(url, blob);
+      }
+      return blob;
     } catch (error: any) {
       throw new Error(error.message || "未知错误");
     }

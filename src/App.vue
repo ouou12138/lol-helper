@@ -4,12 +4,15 @@ import Background from "@/components/Background.vue"
 import { appWindow } from "@tauri-apps/api/window";
 import useRoomStore from "./store/useRoomStore";
 import { clipboard, dialog } from "@tauri-apps/api"
+import useConnectLolClient from "./composables/useConnectLolClient";
+
 
 
 const roomStore = useRoomStore()
 const { roomInfo } = storeToRefs(roomStore)
 const router = useRouter()
 
+const { startConnecting } = useConnectLolClient()
 const shareRoom = () => {
   clipboard.writeText(`lol-helper:${roomInfo.value.id}:${roomInfo.value.password}`)
 }
@@ -37,13 +40,23 @@ const exitRoom = async () => {
 
 provide("window_focus", focus)
 
+onMounted(() => {
+  startConnecting()
+})
+
+
+onErrorCaptured(error => {
+  console.log("onErrorCaptured", error);
+  return false
+})
+
 </script>
 
 <template>
-  <div class="w-100vw h-100vh dark:bg-darkTertiary bg-#fff transition-background-color duration-800 rounded-10px overflow-hidden backdrop-blur-18px border border-#999/30
+  <div id="page" class="w-100vw h-100vh dark:bg-darkTertiary bg-#fff transition-background-color duration-800 rounded-10px overflow-hidden backdrop-blur-18px border border-#999/30
     select-none flex flex-col">
     <Background class="absolute z--1 top-0 w-100vw h-100vh"></Background>
-    <StatusBar class="z-99" fixed placeholder>
+    <StatusBar class="z-99999" fixed placeholder>
       <template #title v-if="roomInfo.id">
         <div class="text-#666 dark:text-#ddd text-3.5 flex gap-2 items-center">
           <span>{{ roomInfo.name }} - {{ roomInfo.id }}:{{ roomInfo.password }}</span>
@@ -57,6 +70,7 @@ provide("window_focus", focus)
     <div class="flex-1 z-2">
       <RouterView> </RouterView>
     </div>
+
   </div>
 </template>
 

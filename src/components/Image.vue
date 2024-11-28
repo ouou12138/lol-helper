@@ -1,5 +1,5 @@
 <template>
-  <img v-bind="$attrs" v-show="url" :src="url" alt="">
+  <props.tag v-bind="$attrs" v-show="url" :src="url" :href="url" alt="" />
 </template>
 
 <script setup lang="ts">
@@ -7,9 +7,12 @@ import { getInstance } from '@/api/client';
 
 const url = ref('')
 
-const props = defineProps<{
-  src: string
-}>()
+const props = withDefaults(defineProps<{
+  src: string,
+  tag?: string
+}>(), {
+  tag: 'img'
+})
 
 const loadImage = async () => {
   try {
@@ -17,9 +20,7 @@ const loadImage = async () => {
       url.value = ""
       return
     }
-    const data = await getInstance().loadAssets<number[]>(props.src)
-    const u8arr = new Uint8Array(data)
-    const blb = new Blob([u8arr], { type: 'image/png' })
+    let blb = await getInstance().loadAssets(props.src)
     url.value = URL.createObjectURL(blb)
   } catch (error: any) {
     console.error(error);
@@ -27,10 +28,12 @@ const loadImage = async () => {
 }
 
 watch(() => props.src, () => {
-  window
   loadImage()
 })
 
+onBeforeMount(() => {
+  URL.revokeObjectURL(url.value)
+})
 onMounted(() => {
   loadImage()
 })

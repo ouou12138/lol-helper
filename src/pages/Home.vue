@@ -2,6 +2,14 @@
     <div class="home w-full h-full">
       <div class="card">
         <div class="card-content">
+          <div class="flex mb-20px items-center gap-10px" v-if="user">
+            <LolAvatar :expPercent="expPercent" :profileIconId="user.profileIconId" :summonerLevel="user.summonerLevel"
+              :avatarSize="80" />
+            <div>
+              <span class="text-5">Hi, {{ user.displayName }}</span>
+              <span class="text-#666 dark:text-#ccc">#{{ user.tagLine }}</span>
+            </div>
+          </div>
           <div class="choose-mode" v-show="action === 'none'">
             <div class="mode-item " @click="setAction('create')">
               <p class="m0 py-5px">创建房间</p>
@@ -31,7 +39,6 @@
                 @click="joinRoom">加入</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -41,7 +48,9 @@
 import useRoomStore from '@/store/useRoomStore';
 import CreateRoom from './component/CreateRoom.vue';
 import JoinRoom from './component/JoinRoom.vue';
+import LolAvatar from '@/components/LolAvatar.vue';
 import { dialog } from '@tauri-apps/api';
+import useUserStore from '@/store/useUserStore';
 
 type ActionType = "create" | "join" | "none"
 
@@ -53,6 +62,9 @@ const router = useRouter()
 
 const roomStore = useRoomStore()
 const { roomInfo } = storeToRefs(roomStore)
+const { user, expPercent } = storeToRefs(useUserStore())
+
+
 
 const setAction = (_act: ActionType) => {
   action.value = _act
@@ -65,6 +77,7 @@ const createRoom = async () => {
       id: values.id,
       name: values.name,
       password: values.password,
+      owner: user.value?.summonerId || -1
     })
     router.push('/room/' + values?.id + "?owner=true")
   } catch (error: any) {
@@ -88,9 +101,7 @@ const init = () => {
   }
 }
 
-onMounted(() => {
-  init()
-})
+onMounted(init)
 
 </script>
 
@@ -108,7 +119,7 @@ onMounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s, background-color 0.8s;
-  @apply dark:bg-darkSecondary/30 dark:text-#fefefe dark:shadow-#aaa/10 shadow-#000/10;
+  @apply dark:bg-darkSecondary bg-#fefefe dark:text-#fefefe dark:shadow-#aaa/10 shadow-#000/10;
 }
 
 .choose-mode {

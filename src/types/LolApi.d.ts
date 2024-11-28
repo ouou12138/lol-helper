@@ -16,7 +16,7 @@ type LolSummonerSummoner = {
   xpUntilNextLevel: number;
 };
 
-type LolSummonerProfilePrivacySetting = "PUBLIC" | "PRIVATE";
+type LolSummonerProfilePrivacySetting = PUBLIC | PRIVATE;
 type LolSummonerRerollPoints = {
   currentPoints: number;
   maxRolls: number;
@@ -56,4 +56,81 @@ type LolChampionsCollectionsRental = {
   purchaseDate: number;
   rented: boolean;
   winCountRemaining: number;
+};
+
+type LolChampSelectChampSelectAction = {
+  actorCellId: number;
+  championId: number;
+  completed: boolean;
+  id: number;
+  isAllyAction: boolean;
+  isInProgress: boolean;
+  pickTurn: 1;
+  type: string;
+};
+
+type LolChampSelectChampSelectBannedChampions = {
+  myTeamBans: nubmer[];
+  numBans: number;
+  theirTeamBans: number[];
+};
+type LolChampSelectChampSelectPlayerSelection = {
+  assignedPosition: string;
+  cellId: number;
+  championId: number;
+  championPickIntent: number;
+  entitledFeatureType: string;
+  selectedSkinId: number;
+  spell1Id: number;
+  spell2Id: number;
+  summonerId: number;
+  team: number;
+  wardSkinId: number;
+};
+
+type LolChampSelectChampSelectTimer = {
+  adjustedTimeLeftInPhase: number;
+  internalNowInEpochMs: number;
+  isInfinite: boolean;
+  phase: "BAN_PICK";
+  totalTimeInPhase: number;
+};
+
+type LolChampSelectChampSelectSession = {
+  actions: LolChampSelectChampSelectAction[][];
+  allowBattleBoost: boolean;
+  allowDuplicatePicks: boolean;
+  allowLockedEvents: boolean;
+  allowRerolling: boolean;
+  allowSkinSelection: boolean;
+  bans: LolChampSelectChampSelectBannedChampions;
+  benchChampions: number[];
+  benchEnabled: boolean;
+  boostableSkinCount: 1;
+  chatDetails: {
+    mucJwtDto: {
+      channelClaim: string;
+      domain: "lol-champ-select";
+      jwt: string;
+      targetRegion: "hn1";
+    };
+    multiUserChatId: string;
+    multiUserChatPassword: string; //jwt
+  };
+  counter: number;
+  gameId: number;
+  hasSimultaneousBans: boolean;
+  hasSimultaneousPicks: boolean;
+  isCustomGame: boolean;
+  isSpectating: boolean;
+  localPlayerCellId: number;
+  lockedEventIndex: number;
+  myTeam: LolChampSelectChampSelectPlayerSelection[];
+  pickOrderSwaps: [];
+  recoveryCounter: number;
+  rerollsRemaining: number;
+  skipChampionSelect: boolean;
+  theirTeam: [];
+  timer: LolChampSelectChampSelectTimer;
+  trades: [];
 };

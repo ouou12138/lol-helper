@@ -1,4 +1,4 @@
 type LcuInfo = {
-  port: string;
+  port: number;
   token: string;
 };
