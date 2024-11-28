@@ -19,6 +19,11 @@ regex = "1.10.6"
 reqwest = { version = "0.12", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 window-shadows = "0.2.2"
+tungstenite = "0.18.0"
+native-tls = "0.2.11"
+tokio-tungstenite = {version="0.24.0", features = ["native-tls"] }
+tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+lazy_static = "1.5.0"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

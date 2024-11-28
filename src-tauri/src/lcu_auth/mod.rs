@@ -1,8 +1,9 @@
+use crate::define::{HttpReqError, HttpReqErrorType};
 use regex::Regex;
 use std::process::Command;
 
 #[tauri::command]
-pub fn get_lcu_info() -> Result<LcuInfo, String> {
+pub fn get_lcu_info() -> Result<LcuInfo, HttpReqError> {
     let output = Command::new("cmd")
         .arg("/C")
         .arg("chcp 65001 | wmic PROCESS WHERE name='LeagueClientUx.exe' GET commandline")
@@ -12,7 +13,10 @@ pub fn get_lcu_info() -> Result<LcuInfo, String> {
     let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
     if !stderr.is_empty() || stderr.contains("No Instance(s) Available.") {
-        return Err(stderr.to_string());
+        return Err(HttpReqError::new(
+            Some(HttpReqErrorType::LcuUnConnect as u16),
+            stderr.trim().to_string(),
+        ));
     }
 
     Ok(create_lcu_info(stdout.to_string()))
